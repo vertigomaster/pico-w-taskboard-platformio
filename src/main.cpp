@@ -2,79 +2,35 @@
 #include <PicoDiagnostics.h>
 #include <ITaskRow.h>
 #include <GPIOImpl/GPIOTaskRow.h>
-
-using ITaskRow = TactileTaskBoard::ITaskRow;
-using GPIORow = TactileTaskBoard::GPIOTaskRow;
+#include "taskboard.h"
 
 // note: arduino framework wraps most of this already - it handles the wifi, for example. 
 //do not touch cyw43 directly
 //  #include "pico/stdlib.h"
 //  #include "pico/cyw43_arch.h"
 
-#define BEEPER_PIN 13u
-#define TEST_LED 14u
-#define TEST_BUTTON 12u
+// #define TEST_LED 14u
+// #define TEST_BUTTON 12u
 
-ITaskRow* testRow = nullptr;
-
-ITaskRow* NewTestRowAsGPIO() 
-{
-    GPIORow* newRow = new GPIORow(TEST_BUTTON, TEST_LED);
-
-    digitalWrite(BEEPER_PIN, HIGH);
-    delay(50);
-    digitalWrite(BEEPER_PIN, LOW);
-    delay(50);
-    digitalWrite(BEEPER_PIN, HIGH);
-    delay(50);
-    digitalWrite(BEEPER_PIN, LOW);
-    delay(200);
-    return newRow;
-}
 
 void setup()
 {
     // Keeps the USB in listening mode, enables remotely flashing, which makes uploads easier, speeding up our dev cycles
     //the number (the "baudrate") doesn't actually matter, apparently - unless doing other specific things.
     Serial.begin(115200);
-
     delay(100);
-
     Serial.println("Beginning Setup...");
 
-    pinMode(LED_BUILTIN, OUTPUT);
-    pinMode(BEEPER_PIN, OUTPUT);
-
-    testRow = NewTestRowAsGPIO();
-    testRow->Setup();
-
+    SetUpTaskboard();
+    // PicoDiagnostics::SetAllGPIOsOutHigh();
+    // digitalWrite(BEEPER_PIN, LOW);
+    
     Serial.println("Setup Complete!");
     digitalWrite(LED_BUILTIN, HIGH);
 }
 
 void loop()
 {
-    //dirty check to see if any new changes have occured
-    if (testRow != nullptr && testRow->IsDirty())
-    {
-        //Later on we could have it return a snapshot object instead; a bit overkill for a hobby project, but would make the library easier to use.
-        testRow->TakeCleanStateSnapshot(); //caches and marks
-        //the raw state is now ready to await new changes
-
-        Serial.println("Button state changes detected. Took clean snapshot.");
-
-        //check if all completed
-
-        //if snapshot shows it was pressed, kick off a beep
-        if (testRow->IsPressed_Clean())
-        {
-            Serial.println("Snapshot shows button was just pressed.");
-        }
-        else
-        {
-            Serial.println("Snapshot shows button was just released.");
-        }
-    }
-
+    RunRowCheckLoop();
     delay(10);
 }
