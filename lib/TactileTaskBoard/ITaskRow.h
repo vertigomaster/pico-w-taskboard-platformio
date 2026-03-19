@@ -11,6 +11,7 @@ namespace TactileTaskBoard {
         public:
         uint32_t taskID;
 
+
         virtual void Setup() = 0;
         //abstracted since we'll migrate from direct GPIO pin reading to checking from an I2C expander
 
@@ -22,12 +23,19 @@ namespace TactileTaskBoard {
         //has this row's current state been acknowledged (presumably by a monitoring system)?
         virtual bool IsDirty() = 0;
 
+
         //marks this row's current state as acknowledged (presumably by a monitoring system)
         virtual void TakeCleanStateSnapshot() = 0;
 
         virtual void SetLEDState(bool shouldTurnOn) = 0;
         virtual bool IsInputEnabled() = 0;
         virtual void EnableInput(bool shouldEnableInput) = 0;
+
+        inline bool IsTaskComplete() { return _taskCompleted; }
+        virtual void MarkTaskComplete(bool doComplete);
+
+        protected:
+        bool _taskCompleted = false;
 
         ~ITaskRow() = default;
     };

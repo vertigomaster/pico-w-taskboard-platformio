@@ -22,10 +22,12 @@ namespace TactileTaskBoard {
         protected:        
         void AttachInterrupt();
         //press/release 
+        void InterruptCallback_OnButtonChange();
         void InterruptCallback_OnButtonPress();
         void InterruptCallback_OnButtonRelease();
-        static inline void OnButtonPressWrapper(TactileTaskBoard::GPIOTaskRow* row){ row->InterruptCallback_OnButtonPress(); }
-        static inline void OnButtonReleaseWrapper(TactileTaskBoard::GPIOTaskRow* row){ row->InterruptCallback_OnButtonRelease(); }
+        static inline void OnButtonChangeWrapper(TactileTaskBoard::GPIOTaskRow* row){ row->InterruptCallback_OnButtonChange(); }
+        // static inline void OnButtonPressWrapper(TactileTaskBoard::GPIOTaskRow* row){ row->InterruptCallback_OnButtonPress(); }
+        // static inline void OnButtonReleaseWrapper(TactileTaskBoard::GPIOTaskRow* row){ row->InterruptCallback_OnButtonRelease(); }
 
         private:
         //flag for input consumption
