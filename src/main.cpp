@@ -1,6 +1,4 @@
 #include <Arduino.h>
-#include <PicoDiagnostics.h>
-#include <TaskItem.h>
 
 //it seems these still work here!
 // #include "pico/stdlib.h"
