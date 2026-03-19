@@ -3,6 +3,7 @@
 
 namespace TactileTaskBoard {
     void OnButtonPressWrapper_GPIO(TactileTaskBoard::GPIOTaskRow* row);
+    void OnButtonReleaseWrapper_GPIO(TactileTaskBoard::GPIOTaskRow* row);
 
     //class for task element
     class TaskRow {
@@ -15,14 +16,21 @@ namespace TactileTaskBoard {
 
     class GPIOTaskRow : public TaskRow {
         public:
-        GPIOTaskRow(pin_size_t pin) : _gpioButtonPin(pin) {}
-        void Setup() override;
+        GPIOTaskRow(pin_size_t buttonPin, pin_size_t ledPin) : _gpioButtonPin(buttonPin), _gpioLedPin(ledPin) {}
 
+        void Setup() override;
         void AttachInterrupt();
-        void OnButtonPress();
+
+        //press/release 
+        void InterruptCallback_OnButtonPress();
+        void InterruptCallback_OnButtonRelease();
+
+        void TurnOnLED();
+        void TurnOffLED();
 
         private:
         pin_size_t _gpioButtonPin;
+        pin_size_t _gpioLedPin;
         volatile bool _pressed = false;
     };
 

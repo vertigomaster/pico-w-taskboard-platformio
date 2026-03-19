@@ -6,6 +6,10 @@ void TactileTaskBoard::GPIOTaskRow::Setup()
     // ITaskLED& led = GetLED();
 
     // butt.AttachInterrupt(led.Toggle); //what do we pass this as?
+
+    pinMode(_gpioButtonPin, INPUT_PULLUP);
+    pinMode(_gpioLedPin, OUTPUT);
+    AttachInterrupt();
 }
 
 void TactileTaskBoard::GPIOTaskRow::AttachInterrupt()
@@ -19,16 +23,42 @@ void TactileTaskBoard::GPIOTaskRow::AttachInterrupt()
         TactileTaskBoard::OnButtonPressWrapper_GPIO, 
         FALLING, //what event to attach the interrupt to
         this); //param to manually pass into the native func
-}
-void TactileTaskBoard::OnButtonPressWrapper_GPIO(TactileTaskBoard::GPIOTaskRow* row){ row->OnButtonPress(); }
 
-void TactileTaskBoard::GPIOTaskRow::OnButtonPress()
+    attachInterrupt(
+        digitalPinToInterrupt(_gpioButtonPin), 
+        TactileTaskBoard::OnButtonReleaseWrapper_GPIO, 
+        RISING, //what event to attach the interrupt to
+        this); //param to manually pass into the native func
+}
+
+void TactileTaskBoard::OnButtonPressWrapper_GPIO(TactileTaskBoard::GPIOTaskRow* row){ row->InterruptCallback_OnButtonPress(); }
+void TactileTaskBoard::GPIOTaskRow::InterruptCallback_OnButtonPress()
 {
     _pressed = true;
-    //TODO: maybe impact button state here too?
+    Serial.println("fooble - interrupt; button press");
+    TurnOnLED();
+
     //don't want interrupts to take too long since they immediately "interrupt" whatever the 
     //CPU was doing - at any time, be that WiFi shenanigans or anything time sensitive
     //luckily the hardware on these is pretty small scale, but still.
+}
 
+void TactileTaskBoard::OnButtonReleaseWrapper_GPIO(TactileTaskBoard::GPIOTaskRow* row){ row->InterruptCallback_OnButtonRelease(); }
+void TactileTaskBoard::GPIOTaskRow::InterruptCallback_OnButtonRelease()
+{
+    _pressed = false;
+    Serial.println("fooble - interrupt; button release");
+    TurnOffLED();
+    //don't want interrupts to take too long since they immediately "interrupt" whatever the 
+    //CPU was doing - at any time, be that WiFi shenanigans or anything time sensitive
+    //luckily the hardware on these is pretty small scale, but still.
+}
 
+void TactileTaskBoard::GPIOTaskRow::TurnOnLED()
+{
+    digitalWrite(_gpioLedPin, HIGH);
+}
+void TactileTaskBoard::GPIOTaskRow::TurnOffLED()
+{
+    digitalWrite(_gpioLedPin, LOW);
 }
