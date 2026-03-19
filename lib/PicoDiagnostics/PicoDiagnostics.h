@@ -10,4 +10,5 @@ namespace PicoDiagnostics {
     bool TestGPIOPin_VoltageShorts(pin_size_t pinNumber);
     bool TestGPIOPin_GroundShorts(pin_size_t pinNumber);
     bool TestGPIOPin_Bridges(pin_size_t pinNumber);
+    void SetAllGPIOsOutHigh();
 }
