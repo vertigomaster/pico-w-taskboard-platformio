@@ -12,6 +12,7 @@ namespace TactileTaskBoard {
         bool IsPressed_Clean() override;
         bool IsDirty() override;
         void TakeCleanStateSnapshot() override;
+        void Refresh() override;
         void SetLEDState(bool shouldTurnOn) override;
         bool IsInputEnabled() override;
         void EnableInput(bool shouldEnableInput) override;

@@ -25,6 +25,7 @@ namespace TactileTaskBoard {
 
         //marks this row's current state as acknowledged (presumably by a monitoring system)
         virtual void TakeCleanStateSnapshot() = 0;
+        virtual void Refresh() = 0;
 
         virtual void SetLEDState(bool shouldTurnOn) = 0;
         virtual bool IsInputEnabled() = 0;

@@ -6,6 +6,8 @@ void TactileTaskBoard::GPIOTaskRow::Setup()
     pinMode(gpioLedPin, OUTPUT);
     _isInputEnabled = true;
     AttachInterrupt();
+
+    Serial.printf("GPIOTaskRow Setup! butt %d, led %d\n", gpioButtonPin, gpioLedPin);
 }
 
 // abstracted since we'll migrate from direct GPIO pin reading to checking from an I2C expander
@@ -22,6 +24,13 @@ void TactileTaskBoard::GPIOTaskRow::TakeCleanStateSnapshot()
     // only the ISR writes to the _interrupt_pressed state
     _pressedState_clean = _pressedState_interrupt;
     _isDirtyFlag = false;
+
+}
+
+void TactileTaskBoard::GPIOTaskRow::Refresh()
+{
+    TakeCleanStateSnapshot();
+    if(IsPressed_Clean()) MarkTaskComplete(!_taskCompleted);
 }
 
 void TactileTaskBoard::GPIOTaskRow::AttachInterrupt()
@@ -55,7 +64,7 @@ void TactileTaskBoard::GPIOTaskRow::InterruptCallback_OnButtonPress()
     _isDirtyFlag = true;
     Serial.println("fooble - interrupt; button press");
 
-    MarkTaskComplete(!_taskCompleted);
+    // MarkTaskComplete(!_taskCompleted);
 
     // don't want interrupts to take too long since they immediately "interrupt" whatever the
     // CPU was doing - at any time, be that WiFi shenanigans or anything time sensitive
