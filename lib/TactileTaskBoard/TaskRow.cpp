@@ -1,7 +1,4 @@
-#pragma once
-#include <Arduino.h>
 #include "TaskRow.h"
-
 
 void TactileTaskBoard::GPIOTaskRow::Setup()
 {
