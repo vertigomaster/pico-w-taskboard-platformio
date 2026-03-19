@@ -11,8 +11,6 @@ using GPIORow = TactileTaskBoard::GPIOTaskRow;
 //  #include "pico/stdlib.h"
 //  #include "pico/cyw43_arch.h"
 
-// #define DEBUG_MODE
-
 #define BEEPER_PIN 13u
 #define TEST_LED 14u
 #define TEST_BUTTON 12u
@@ -31,12 +29,6 @@ ITaskRow* NewTestRowAsGPIO()
     delay(50);
     digitalWrite(BEEPER_PIN, LOW);
     delay(200);
-
-    // #ifdef DEBUG_MODE
-    // Serial.printf("New GPIOTaskRow set up with button pin GP%d and led pin GP%d\n", 
-    //     newRow->gpioButtonPin, newRow->gpioLedPin);
-    // #endif
-
     return newRow;
 }
 
@@ -48,9 +40,7 @@ void setup()
 
     delay(100);
 
-    // #ifdef DEBUG_MODE
     Serial.println("Beginning Setup...");
-    // #endif
 
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(BEEPER_PIN, OUTPUT);
@@ -58,11 +48,8 @@ void setup()
     testRow = NewTestRowAsGPIO();
     testRow->Setup();
 
-    // #ifdef DEBUG_MODE
     Serial.println("Setup Complete!");
-    // #endif
     digitalWrite(LED_BUILTIN, HIGH);
-
 }
 
 void loop()
@@ -82,14 +69,10 @@ void loop()
         if (testRow->IsPressed_Clean())
         {
             Serial.println("Snapshot shows button was just pressed.");
-
-            // digitalWrite(BEEPER_PIN, HIGH);
-            // delay(100); //interrupts will still jump in, but the beep needs to continue
         }
-        else//otherwise, snapshot says it is not pressed. since it was dirtied, we know this is a change, and thus turn it off.
+        else
         {
             Serial.println("Snapshot shows button was just released.");
-            // digitalWrite(BEEPER_PIN, LOW);
         }
     }
 

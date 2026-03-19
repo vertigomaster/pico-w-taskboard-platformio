@@ -11,7 +11,6 @@ namespace TactileTaskBoard {
         public:
         uint32_t taskID;
 
-
         virtual void Setup() = 0;
         //abstracted since we'll migrate from direct GPIO pin reading to checking from an I2C expander
 
