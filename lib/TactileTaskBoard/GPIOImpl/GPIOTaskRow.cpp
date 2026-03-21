@@ -1,6 +1,6 @@
 #include "GPIOTaskRow.h"
 
-void TactileTaskBoard::GPIOTaskRow::Setup()
+void TactileTaskBoard::GPIOTaskRow::Begin()
 {
     pinMode(gpioButtonPin, INPUT_PULLDOWN);
     pinMode(gpioLedPin, OUTPUT);
@@ -13,7 +13,7 @@ void TactileTaskBoard::GPIOTaskRow::Setup()
 // abstracted since we'll migrate from direct GPIO pin reading to checking from an I2C expander
 bool TactileTaskBoard::GPIOTaskRow::IsPressed_Raw() { return _pressedState_interrupt; }
 bool TactileTaskBoard::GPIOTaskRow::IsPressed_Clean() { return _pressedState_clean; }
-bool TactileTaskBoard::GPIOTaskRow::IsDirty() { return _isDirtyFlag; }
+bool TactileTaskBoard::GPIOTaskRow::IsDirty() { return IsReady() && _isDirtyFlag; }
 
 void TactileTaskBoard::GPIOTaskRow::TakeCleanStateSnapshot()
 {

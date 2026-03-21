@@ -4,10 +4,20 @@
 namespace TactileTaskBoard {
     class GPIOTaskRow : public ITaskRow {
         public:
-        GPIOTaskRow(pin_size_t buttonPin, pin_size_t ledPin) : gpioButtonPin(buttonPin), gpioLedPin(ledPin) {}
+        GPIOTaskRow(pin_size_t buttonPin, pin_size_t ledPin) 
+            : gpioButtonPin(buttonPin), gpioLedPin(ledPin), _isReady(true) {}
+        
+        //post construction setup
+        void Begin(pin_size_t buttonPin, pin_size_t ledPin)
+        {
+            gpioButtonPin = buttonPin;
+            gpioLedPin = ledPin;
+            _isReady = true;
+        }
 
         //ITaskRow overrides
-        void Setup() override;
+        void Begin() override;
+        bool IsReady() override { return _isReady; }
         bool IsPressed_Raw() override;
         bool IsPressed_Clean() override;
         bool IsDirty() override;
@@ -16,7 +26,7 @@ namespace TactileTaskBoard {
         void SetLEDState(bool shouldTurnOn) override;
         bool IsInputEnabled() override;
         void EnableInput(bool shouldEnableInput) override;
-
+        
         pin_size_t gpioButtonPin;
         pin_size_t gpioLedPin;
         
@@ -34,6 +44,7 @@ namespace TactileTaskBoard {
         //flag for input consumption
         //can't detact the interrupt, so this flag is just queried
         bool _isInputEnabled = false;
+        bool _isReady = false;
         
         volatile bool _pressedState_interrupt = false;
         volatile bool _isDirtyFlag = false;

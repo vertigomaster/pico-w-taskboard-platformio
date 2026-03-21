@@ -11,7 +11,8 @@ namespace TactileTaskBoard {
         public:
         uint32_t taskID;
 
-        virtual void Setup() = 0;
+        virtual void Begin() = 0;
+        virtual bool IsReady() = 0;
         //abstracted since we'll migrate from direct GPIO pin reading to checking from an I2C expander
 
         //directly checks against the interrupt state, may flucuate

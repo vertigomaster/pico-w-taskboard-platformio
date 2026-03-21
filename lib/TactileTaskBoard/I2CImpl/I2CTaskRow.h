@@ -7,8 +7,9 @@ namespace TactileTaskBoard
     {
         public:
         //ITaskRow overrides
-        void Setup() override;
-        bool IsPressed() override;
+        void Begin() override;
+        bool IsPressed_Raw() override;
+        bool IsPressed_Clean() override;
         bool IsDirty() override;
         void TakeCleanStateSnapshot() override;
         void SetLEDState(bool shouldTurnOn) override;
