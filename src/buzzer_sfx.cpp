@@ -6,7 +6,9 @@ namespace Beep {
     bool isSetup = false;
 
     bool Setup(){
-#ifdef DEV_USING_LAFVIN_BREAKOUT_BOARD
+#ifdef QUIET_MODE
+        return false;
+#elif DEV_USING_LAFVIN_BREAKOUT_BOARD
         pinMode(BEEP_PIN, OUTPUT);
         isSetup = true;
         return true;

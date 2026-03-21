@@ -27,6 +27,16 @@ namespace PicoDiagnostics
         });
     }
 
+    void SetAllGPIOsOutLow()
+    {
+        RunTestOnAllGPIOs([](pin_size_t pinNumber){
+            pinMode(pinNumber, OUTPUT);
+            digitalWrite(pinNumber, LOW);
+
+            return true;
+        });
+    }
+
     uint32_t RunStandardTestsOnAllGPIOs()
     {
         uint32_t pendingResult;

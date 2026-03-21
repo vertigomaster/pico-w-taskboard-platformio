@@ -27,7 +27,7 @@ namespace Taskboard
     {
         // need something better soon,
         // maybe pull from server or have a config/setup mode?
-        maxTaskCount = 2;
+        maxTaskCount = 4;
         if (maxTaskCount < 1 || maxTaskCount > PHYSICAL_TASKROW_COUNT)
         {
             // scream
@@ -40,6 +40,10 @@ namespace Taskboard
         rows[0].Begin(12, 14);
         Beep::ElementSetup();
         rows[1].Begin(18, 15);
+        Beep::ElementSetup();
+        rows[2].Begin(9, 16);//some of these pins are mysteriously reserved or having issues
+        Beep::ElementSetup();
+        rows[3].Begin(1, 26);
         Beep::ElementSetup();
 
         activeFileSysPtr = fileSysPtr;
@@ -92,10 +96,9 @@ namespace Taskboard
 
             // beep (for now)
             // TODO: do something cooler
-            // digitalWrite(LED_BUILTIN, HIGH);
-            // delay(500);
-            // digitalWrite(LED_BUILTIN, LOW);
             Beep::Yay();
+
+            delay(500);
 
             celebrated = true;
 
