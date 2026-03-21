@@ -3,6 +3,7 @@
 #include <ITaskRow.h>
 #include <GPIOImpl/GPIOTaskRow.h>
 #include "taskboard.h"
+#include <LittleFS.h>
 
 // note: arduino framework wraps most of this already - it handles the wifi, for example. 
 //do not touch cyw43 directly
@@ -11,6 +12,7 @@
 
 // #define TEST_LED 14u
 // #define TEST_BUTTON 12u
+#define FORMAT_LITTLEFS_IF_FAILED false
 
 
 void setup()
@@ -21,9 +23,17 @@ void setup()
     delay(100);
     Serial.println("Beginning Setup...");
 
-    SetUpTaskboard();
-    // PicoDiagnostics::SetAllGPIOsOutHigh();
-    // digitalWrite(BEEPER_PIN, LOW);
+    Serial.println("Setting up File System...");
+    if(LittleFS.begin()){
+        Serial.println("File System Set Up!");
+    } else {
+        Serial.println("File System setup failed - cannot read/write task data :(");
+        return;
+    }
+
+    Serial.println("Setting up Taskboard module...");
+    SetUpTaskboard(*LittleFS);
+    Serial.println("Taskboard Module Set Up!");
     
     Serial.println("Setup Complete!");
     digitalWrite(LED_BUILTIN, HIGH);
