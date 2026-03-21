@@ -4,6 +4,7 @@
 namespace TactileTaskBoard {
     class GPIOTaskRow : public ITaskRow {
         public:
+        GPIOTaskRow() {}
         GPIOTaskRow(pin_size_t buttonPin, pin_size_t ledPin) 
             : gpioButtonPin(buttonPin), gpioLedPin(ledPin), _isReady(true) {}
         
@@ -13,6 +14,7 @@ namespace TactileTaskBoard {
             gpioButtonPin = buttonPin;
             gpioLedPin = ledPin;
             _isReady = true;
+            Begin();
         }
 
         //ITaskRow overrides
