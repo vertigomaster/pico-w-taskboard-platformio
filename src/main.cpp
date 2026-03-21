@@ -32,7 +32,7 @@ void setup()
     }
 
     Serial.println("Setting up Taskboard module...");
-    SetUpTaskboard(*LittleFS);
+    SetUpTaskboard(&LittleFS);
     Serial.println("Taskboard Module Set Up!");
     
     Serial.println("Setup Complete!");
